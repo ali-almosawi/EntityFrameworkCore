@@ -181,6 +181,41 @@ namespace Microsoft.EntityFrameworkCore.Query
                 e => e.Min + " " + e.Max);
         }
 
+
+        [ConditionalFact]
+        public virtual void GroupBy_Key_Sum_Min_Max_Avg()
+        {
+            AssertQuery<Order>(
+                os => os.GroupBy(o => o.CustomerID).Select(
+                    g =>
+                        new
+                        {
+                            Key = g.Key,
+                            Sum = g.Sum(o => o.OrderID),
+                            Min = g.Min(o => o.OrderID),
+                            Max = g.Max(o => o.OrderID),
+                            Avg = g.Average(o => o.OrderID)
+                        }),
+                e => e.Min + " " + e.Max);
+        }
+
+        [ConditionalFact]
+        public virtual void GroupBy_Composite_Key_Sum_Min_Max_Avg()
+        {
+            AssertQuery<Order>(
+                os => os.GroupBy(o => new { o.CustomerID, o.OrderDate }).Select(
+                    g =>
+                        new
+                        {
+                            Key = g.Key,
+                            Sum = g.Sum(o => o.OrderID),
+                            Min = g.Min(o => o.OrderID),
+                            Max = g.Max(o => o.OrderID),
+                            Avg = g.Average(o => o.OrderID)
+                        }),
+                e => e.Min + " " + e.Max);
+        }
+
         [ConditionalFact]
         public virtual void GroupBy_with_result_selector()
         {

@@ -100,9 +100,9 @@ ORDER BY [o].[CustomerID]");
             base.GroupBy_Sum();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID])
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void GroupBy_Count()
@@ -110,9 +110,9 @@ ORDER BY [o].[CustomerID]");
             base.GroupBy_Count();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT COUNT(*)
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void GroupBy_LongCount()
@@ -120,9 +120,9 @@ ORDER BY [o].[CustomerID]");
             base.GroupBy_LongCount();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT COUNT_BIG(*)
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void GroupBy_Shadow()
@@ -163,9 +163,14 @@ ORDER BY [e].[EmployeeID]");
             base.GroupBy_Sum_Min_Max_Avg();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID]), MIN([o].[OrderID]), MAX([o].[OrderID]), AVG(CAST([o].[OrderID] AS float))
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
+        }
+
+        public override void GroupBy_Key_Sum_Min_Max_Avg()
+        {
+            base.GroupBy_Key_Sum_Min_Max_Avg();
         }
 
         public override void GroupBy_with_result_selector()
@@ -173,9 +178,9 @@ ORDER BY [o].[CustomerID]");
             base.GroupBy_with_result_selector();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID]), MIN([o].[OrderID]), MAX([o].[OrderID]), AVG(CAST([o].[OrderID] AS float))
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void GroupBy_with_element_selector_sum()
@@ -183,9 +188,9 @@ ORDER BY [o].[CustomerID]");
             base.GroupBy_with_element_selector_sum();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID])
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void GroupBy_with_element_selector()
@@ -223,9 +228,9 @@ ORDER BY [e].[EmployeeID]");
             base.GroupBy_with_element_selector_sum_max();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID]), MAX([o].[OrderID])
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void GroupBy_with_anonymous_element()
@@ -233,9 +238,9 @@ ORDER BY [o].[CustomerID]");
             base.GroupBy_with_anonymous_element();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID])
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void GroupBy_with_two_part_key()
@@ -243,9 +248,9 @@ ORDER BY [o].[CustomerID]");
             base.GroupBy_with_two_part_key();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID])
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID], [o].[OrderDate]");
+GROUP BY [o].[CustomerID], [o].[OrderDate]");
         }
 
         public override void GroupBy_DateTimeOffset_Property()
@@ -264,9 +269,9 @@ ORDER BY DATEPART(month, [o].[OrderDate])");
             base.OrderBy_GroupBy();
 
             AssertSql(
-                @"SELECT [o].[OrderID], [o].[CustomerID], [o].[EmployeeID], [o].[OrderDate]
+                @"SELECT SUM([o].[OrderID])
 FROM [Orders] AS [o]
-ORDER BY [o].[CustomerID], [o].[OrderID]");
+GROUP BY [o].[CustomerID]");
         }
 
         public override void OrderBy_GroupBy_SelectMany()
